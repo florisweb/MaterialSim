@@ -6,11 +6,13 @@ export default class Node {
 	position = new Vector(0, 0);
 	isFixed = false;
 	get energy() {
-		return this.springs.filter(spring => spring.nodeA === this).map(spring => spring.energy).reduce((a, b) => a + b, 0);
+		let springEnergy = this.springs.filter(spring => spring.nodeA === this).map(spring => spring.energy).reduce((a, b) => a + b, 0);
+		return springEnergy - this.position.y * 9.81;
 	}
 
-	constructor({position}) {
+	constructor({position, isFixed}) {
 		this.position = position;
+		this.isFixed = isFixed;
 	}
 
 	connect(_otherNode) {

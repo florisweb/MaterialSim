@@ -23,26 +23,25 @@ export default new class Simulation {
 
 		for (let i = 0; i < 100; i++)
 		{
-			let variant = this.generateWorldVariant();
-			let energy = variant.energy;
+			let varyNodeIndex = Math.floor(this.world.nodes.length * Math.random());
+			let node = this.world.nodes[varyNodeIndex];
+			while (node.isFixed)
+			{
+				varyNodeIndex = Math.floor( this.world.nodes.length * Math.random());
+				node = this.world.nodes[varyNodeIndex];
+			}
+
+			const varyRange = .1 + Math.random();
+			let vary = new Vector(varyRange - 2 * varyRange * Math.random(), varyRange - 2 * varyRange * Math.random());
+			node.position.add(vary);
+
+			let energy = this.world.energy;
 			let deltaEnergy = energy - curEnergy;
 			let accepted = deltaEnergy < 0 || Math.random() < Math.exp(-deltaEnergy * this.physics.Beta);
-			if (accepted)
-			{
-				this.world = variant;
-				return deltaEnergy;
-			}
+			
+			if (accepted) return deltaEnergy;
+			node.position.add(vary.scale(-1));
 		}
 		return false;
-	}
-
-	generateWorldVariant() {
-		let newWorld = this.world.copy()
-		let varyNodeIndex = Math.floor(newWorld.nodes.length * Math.random());
-		const varyRange = .1;
-
-		newWorld.nodes[varyNodeIndex].position.x += varyRange - 2 * varyRange * Math.random();
-		newWorld.nodes[varyNodeIndex].position.y += varyRange - 2 * varyRange * Math.random();
-		return newWorld;
 	}
 }

@@ -14,7 +14,7 @@ export default class World {
 	}
 
 	copy() {
-		let newNodes = this.nodes.map(_oldNode => new Node({position: _oldNode.position.copy()}));
+		let newNodes = this.nodes.map(_oldNode => new Node({position: _oldNode.position.copy(), isFixed: _oldNode.isFixed}));
 		for (let node of this.nodes)
 		{
 			let ownNodeIndex = this.nodes.findIndex(_node => node.position.difference(_node.position).length === 0);
