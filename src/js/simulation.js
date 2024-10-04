@@ -31,7 +31,7 @@ export default new class Simulation {
 				node = this.world.nodes[varyNodeIndex];
 			}
 
-			const varyRange = .1 + Math.random();
+			const varyRange = 200 * Math.random();
 			let vary = new Vector(varyRange - 2 * varyRange * Math.random(), varyRange - 2 * varyRange * Math.random());
 			node.position.add(vary);
 

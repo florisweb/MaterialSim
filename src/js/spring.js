@@ -2,8 +2,8 @@ import Vector from './vector.js';
 
 
 export default class Spring {
-	targetLength = .1;
-	springConstant = 100;
+	targetLength = 5;
+	springConstant = 200;
 	nodeA;
 	nodeB;
 

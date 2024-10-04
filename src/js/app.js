@@ -10,7 +10,7 @@ const App = new class {
 	constructor() {
 		window.App = this;
 
-		const nodeCount = 50;
+		const nodeCount = 30;
 		for (let i = 0; i < nodeCount; i++)
 		{
 			Simulation.world.nodes.push(new Node({position: new Vector(Math.random() * 100, Math.random() * 100)}))
@@ -25,14 +25,37 @@ const App = new class {
 			let self = Simulation.world.nodes[i];
 			self.connect(Simulation.world.nodes[i + 1]);
 		}
+
+		for (let i = 0; i < 50; i++)
+		{
+			let randomNodeIndexA = Math.floor(Simulation.world.nodes.length * Math.random());
+			let randomNodeIndexB = Math.floor(Simulation.world.nodes.length * Math.random());
+			if (randomNodeIndexA === randomNodeIndexB) continue;
+			let nodeA = Simulation.world.nodes[randomNodeIndexA];
+			let nodeB = Simulation.world.nodes[randomNodeIndexB];
+			let alreadyConnected = false;
+			for (let spring of nodeA.springs)
+			{
+				if (spring.nodeA === nodeB || spring.nodeB === nodeB)
+				{
+					alreadyConnected = true;
+					break;
+				}
+			}
+			if (alreadyConnected) continue;
+			nodeA.connect(nodeB);
+
+
+		}
 		
 		this.render();
 
-
-		setInterval(() => {
+		let loop = () => {
 			Simulation.optimize(100);
 			this.render();
-		}, 10);
+			requestAnimationFrame(loop);
+		}
+		loop()
 	}
 	
 	optimize() {
