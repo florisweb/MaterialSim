@@ -19,6 +19,7 @@ export default new class Simulation {
 	}
 
 	step() {
+		if (this.world.nodes.length === 0) return false;
 		let curEnergy = this.world.energy;
 
 		for (let i = 0; i < 100; i++)

@@ -1,18 +1,36 @@
 import Vector from './vector.js';
-
+let App;
 export default class Renderer {
 	Canvas;
 	ctx;
 
 	size = new Vector(100, 100);
-	constructor(_canvas) {
+	#curWorld;
+
+	constructor(_canvas, _app) {
 		this.Canvas = _canvas;
 		this.ctx = this.Canvas.getContext('2d');
 		this.camera = new Camera(this);
+		App = _app;
 	}
 
-	renderWorld(_world) {
+
+	render() {
 		this.ctx.clearRect(0, 0, this.Canvas.width, this.Canvas.height);
+		if (this.#curWorld) this.#renderWorld(this.#curWorld);
+
+		if (App.inputHandler.drawingLine)
+		{
+			this.#drawLine(App.inputHandler.curStingStartNode.position, App.inputHandler.curMousePos, '#f00');
+		};
+	}
+
+
+	setWorld(_world) {
+		this.#curWorld = _world;
+	}
+
+	#renderWorld(_world) {
 		for (let node of _world.nodes) {
 			this.#drawNode(node);
 			let springs = node.springs.filter(_spring => _spring.nodeA === node);
@@ -34,10 +52,14 @@ export default class Renderer {
 	}
 
 	#drawSpring(_spring) {
-		let posA = this.camera.worldToPxCoord(_spring.nodeA.position);
-		let posB = this.camera.worldToPxCoord(_spring.nodeB.position);
+		this.#drawLine(_spring.nodeA.position, _spring.nodeB.position, '#777');
+	}
+
+	#drawLine(_posA, _posB, _color) {
+		let posA = this.camera.worldToPxCoord(_posA);
+		let posB = this.camera.worldToPxCoord(_posB);
 	
-		this.ctx.strokeStyle = '#777';
+		this.ctx.strokeStyle = _color;
 		this.ctx.beginPath()
 		this.ctx.moveTo(posA.value[0], posA.value[1]);
 		this.ctx.lineTo(posB.value[0], posB.value[1]);

@@ -25,4 +25,9 @@ export default class Spring {
 		this.targetLength = _config?.targetLength || this.targetLength;
 		this.springConstant = _config?.springConstant || this.springConstant;
 	}
+
+	remove() {
+		this.nodeA.springs = this.nodeA.springs.filter(node => node !== this);
+		this.nodeB.springs = this.nodeB.springs.filter(node => node !== this);
+	}
 }
