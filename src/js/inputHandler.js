@@ -3,7 +3,7 @@ import App from './app.js';
 import Vector from './vector.js';
 
 let Canvas;
-const maxNodeDragDistanceSquared = 50;
+const maxNodeDragDistanceSquared = 5**2;
 
 export default class InputHandler {
 	curStingStartNode;
@@ -28,7 +28,6 @@ export default class InputHandler {
 		});
 
 		window.addEventListener('mouseup', (_e) => {
-			console.log(_e);
 			let pxPos = this.#eventToPxCoord(_e);
 			let curMousePos = App.renderer.camera.pxToWorldCoord(pxPos);
 			let curSet = this.#getNodeSetByPos(curMousePos);
@@ -40,7 +39,8 @@ export default class InputHandler {
 
 					let newNode = new Node({position: this.curMousePos.copy()});
 					Simulation.world.nodes.push(newNode);
-					this.curStingStartNode.connect(newNode);
+					let spring = this.curStingStartNode.connect(newNode);
+					spring.targetLength = this.curMousePos.difference(this.curStingStartNode.position).length
 				} else if (curSet)
 				{
 					if (this.curStingStartNode.id === curSet.node.id) return;
@@ -54,7 +54,10 @@ export default class InputHandler {
 						exists.remove();
 						Simulation.world.nodes = Simulation.world.nodes.filter(node => node.springs.length > 0 || node.isFixed);
 
-					} else this.curStingStartNode.connect(curSet.node);
+					} else {
+						let spring = this.curStingStartNode.connect(curSet.node);
+						spring.targetLength = this.curStingStartNode.position.difference(curSet.node.position).length
+					}
 				}
 			} else if (_e.shiftKey) {
 				let newNode = new Node({position: this.curMousePos.copy(), isFixed: true});

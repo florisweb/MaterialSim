@@ -12,16 +12,6 @@ const App = new class {
 	constructor() {
 		window.App = this;
 
-		const nodeCount = 2;
-		for (let i = 0; i < nodeCount; i++)
-		{
-			Simulation.world.nodes.push(new Node({position: new Vector(Math.random() * 100, Math.random() * 100)}))
-		}
-		Simulation.world.nodes[0].isFixed = true;
-		Simulation.world.nodes[0].position.y = 10;
-		Simulation.world.nodes[nodeCount - 1].isFixed = true;
-		Simulation.world.nodes[nodeCount - 1].position.y = 10;
-
 		this.renderer.setWorld(Simulation.world);
 		this.render();
 	}
@@ -33,7 +23,7 @@ const App = new class {
 
 	render() {
 		this.renderer.render();
-		// Simulation.optimize(10);
+		// Simulation.optimize(20);
 		requestAnimationFrame(() => this.render());
 	}
 }

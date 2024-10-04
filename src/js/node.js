@@ -23,5 +23,6 @@ export default class Node {
 		let spring = new Spring(this, _otherNode);
 		this.springs.push(spring);
 		_otherNode.springs.push(spring);
+		return spring;
 	}
 }
